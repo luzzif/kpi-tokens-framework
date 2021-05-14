@@ -1,46 +1,43 @@
 import { MockProvider } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import {
-    BooleanKPITokensFactory,
-    BooleanKPITokensFactory__factory,
-    ConditionalTokens,
-    ConditionalTokens__factory,
-    ERC1155PositionWrapper,
-    ERC1155PositionWrapperFactory,
-    ERC1155PositionWrapperFactory__factory,
-    ERC1155PositionWrapper__factory,
+    KPITokensFactory,
+    KPITokensFactory__factory,
+    KPIToken,
+    KPIToken__factory,
+    Realitio,
+    Realitio__factory,
     ERC20PresetMinterPauser,
     ERC20PresetMinterPauser__factory,
+    Reality,
+    Reality__factory,
 } from "../../typechain";
 
 export const fixture = async (_: any, provider: MockProvider) => {
     const [, testAccount, oracleAccount] = provider.getWallets();
 
-    const ctfFactory = (await ethers.getContractFactory(
-        "ConditionalTokens"
-    )) as ConditionalTokens__factory;
-    const ctf = (await ctfFactory.deploy()) as ConditionalTokens;
+    const realitioFactory = (await ethers.getContractFactory(
+        "Realitio"
+    )) as Realitio__factory;
+    const realitio = (await realitioFactory.deploy()) as Realitio;
 
-    const erc1155WrapperImplementationFactory = (await ethers.getContractFactory(
-        "ERC1155PositionWrapper"
-    )) as ERC1155PositionWrapper__factory;
-    const erc1155WrapperImplementation = (await erc1155WrapperImplementationFactory.deploy()) as ERC1155PositionWrapper;
+    const realityFactory = (await ethers.getContractFactory(
+        "Reality"
+    )) as Reality__factory;
+    const reality = (await realityFactory.deploy(realitio.address)) as Reality;
 
-    const erc1155PositionWrapperFactoryFactory = (await ethers.getContractFactory(
-        "ERC1155PositionWrapperFactory"
-    )) as ERC1155PositionWrapperFactory__factory;
-    const erc1155PositionWrapperFactory = (await erc1155PositionWrapperFactoryFactory.deploy(
-        erc1155WrapperImplementation.address,
-        ctf.address
-    )) as ERC1155PositionWrapperFactory;
+    const kpiTokenFactory = (await ethers.getContractFactory(
+        "KPIToken"
+    )) as KPIToken__factory;
+    const kpiToken = (await kpiTokenFactory.deploy()) as KPIToken;
 
     const kpiTokensFactoryFactory = (await ethers.getContractFactory(
-        "BooleanKPITokensFactory"
-    )) as BooleanKPITokensFactory__factory;
+        "KPITokensFactory"
+    )) as KPITokensFactory__factory;
     const kpiTokensFactory = (await kpiTokensFactoryFactory.deploy(
-        ctf.address,
-        erc1155PositionWrapperFactory.address
-    )) as BooleanKPITokensFactory;
+        kpiToken.address,
+        reality.address
+    )) as KPITokensFactory;
 
     const collateralTokenFactory = (await ethers.getContractFactory(
         "ERC20PresetMinterPauser"
@@ -53,9 +50,7 @@ export const fixture = async (_: any, provider: MockProvider) => {
     return {
         testAccount,
         oracleAccount,
-        ctf,
-        erc1155WrapperImplementation,
-        erc1155PositionWrapperFactory,
+        kpiToken,
         kpiTokensFactory,
         collateralToken,
     };

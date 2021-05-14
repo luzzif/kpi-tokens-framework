@@ -9,7 +9,7 @@ export const getExpectedWrapperAddress = (
     factoryAddress: string,
     implementationAddress: string,
     positionId: BigNumber
-) => {
+): string => {
     const initCodeHash = solidityKeccak256(
         ["bytes"],
         [
@@ -24,4 +24,9 @@ export const getExpectedWrapperAddress = (
         solidityKeccak256(["bytes"], [solidityPack(["uint256"], [positionId])]),
         initCodeHash
     );
+};
+
+export const encodeRealityQuestion = (question: string): string => {
+    question = JSON.stringify(question).replace(/^"|"$/g, "");
+    return `${question}\u241fkpi\u241fen_US`;
 };

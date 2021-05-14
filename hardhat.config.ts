@@ -44,7 +44,7 @@ const hardhatConfig: HardhatUserConfig = {
                 },
             },
             {
-                version: "0.5.1",
+                version: "0.4.25",
                 settings: {
                     optimizer: {
                         enabled: true,
@@ -63,9 +63,8 @@ const hardhatConfig: HardhatUserConfig = {
     },
     dependencyCompiler: {
         paths: [
-            "erc1155-to-erc20-wrapper-contracts/ERC1155PositionWrapper.sol",
-            "erc1155-to-erc20-wrapper-contracts/ERC1155PositionWrapperFactory.sol",
-            "@gnosis.pm/conditional-tokens-contracts/contracts/ConditionalTokens.sol",
+            "@realitio/realitio-contracts/truffle/contracts/Realitio.sol",
+            "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol",
         ],
     },
 };
